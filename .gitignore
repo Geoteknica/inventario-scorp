@@ -1,0 +1,8 @@
+# Claves y contraseñas: nunca al repositorio
+setup/.env
+setup/credenciales.csv
+setup/configurar.mjs
+setup/*.geojson
+setup/node_modules/
+.DS_Store
+Thumbs.db
