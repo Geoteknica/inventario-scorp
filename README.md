@@ -22,7 +22,8 @@ Página del proyecto: https://estudiostecnicos.com/proyectos-de-participacion-ci
 | `supabase/01_esquema.sql` | Tablas, reglas de seguridad y funciones de la base de datos |
 | `setup/configurar.mjs` | *No está en el repositorio.* Carga los límites y crea las 79 cuentas; se guarda solo en la computadora de la administración porque contiene la regla de las contraseñas |
 | `supabase/02_rol_colaborador.sql` | Añade el rol «colaborador» |
-| `setup/crear_colaborador.mjs` | Crea o actualiza una cuenta de colaborador |
+| `supabase/03_rol_consulta.sql` | Añade el rol «consulta» (solo ver) |
+| `setup/crear_colaborador.mjs` | Crea o actualiza una cuenta de colaborador o, con `--consulta`, de solo ver |
 
 ## Puesta en marcha
 
@@ -40,18 +41,20 @@ Página del proyecto: https://estudiostecnicos.com/proyectos-de-participacion-ci
    El script escribe `setup/credenciales.csv` con las 79 cuentas. Ese archivo y `.env` no se suben a GitHub.
 3. **Sitio.** En GitHub → Settings → Pages, publique desde la rama `main`, carpeta `/ (root)`.
 
-## Cuentas de colaborador
+## Cuentas de colaborador y de consulta
 
 | Rol | Ve | Añade | Edita y mueve | Elimina | Restaura y exporta |
 | --- | --- | --- | --- | --- | --- |
 | Municipio | Su municipio (de los vecinos, solo la ubicación) | En su municipio | Puntos de su municipio | Puntos de su municipio | No |
 | Colaborador | Toda la isla, con todos los datos (sin las eliminadas) | En cualquier municipio | Solo lo que él añadió | No | No |
+| Consulta | Toda la isla, con todos los datos (sin las eliminadas) | No | No | No | No |
 | Administración | Todo, incluidas las eliminadas | En cualquier municipio | Todo | Todo | Sí |
 
 Para crear un colaborador, ejecute una vez `supabase/02_rol_colaborador.sql` en el SQL Editor y luego, desde `setup`:
 ```
 node crear_colaborador.mjs correo@ejemplo.com "contraseña de al menos 10 caracteres"
 ```
+Para una cuenta de solo ver, ejecute una vez `supabase/03_rol_consulta.sql` y añada `--consulta` al final del mismo comando.
 Un punto que un colaborador añade dentro de un municipio pasa a formar parte del inventario de ese municipio,
 que puede editarlo o eliminarlo como los suyos.
 

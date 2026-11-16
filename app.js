@@ -48,8 +48,9 @@ let busy = false;
 
 const isAdmin = () => perfil && perfil.rol === "admin";
 const isColab = () => perfil && perfil.rol === "colaborador";
-const isla = () => isAdmin() || isColab();          // ven toda la isla
-const soloLectura = rec => isColab() && rec.creado_por !== myId;
+const isConsulta = () => perfil && perfil.rol === "consulta";
+const isla = () => isAdmin() || isColab() || isConsulta();   // ven toda la isla
+const soloLectura = rec => isConsulta() || (isColab() && rec.creado_por !== myId);
 const muniById = id => MUNIS && MUNIS.features.find(f => f.properties.id === id);
 const recById = id => recs.find(r => r.id === id);
 
@@ -146,10 +147,11 @@ function startApp() {
   $("login").hidden = true;
   $("app").hidden = false;
   const own = isla() ? null : muniById(perfil.municipio_id);
-  $("muni-title").textContent = isAdmin() ? "Administración · Puerto Rico" : isColab() ? "Colaboración · Puerto Rico" : "Municipio de " + own.properties.nombre;
+  $("muni-title").textContent = isAdmin() ? "Administración · Puerto Rico" : isColab() ? "Colaboración · Puerto Rico" : isConsulta() ? "Consulta · Puerto Rico" : "Municipio de " + own.properties.nombre;
   $("who").textContent = perfil.correo;
   ["toggle-deleted", "export-scope", "export"].forEach(id => $(id).hidden = !isAdmin());
   $("admin-muni").hidden = !isla();
+  $("add").hidden = isConsulta();
 
   map = L.map("map", { zoomControl: true, attributionControl: true });
   map.attributionControl.addAttribution("Estudios Técnicos, Inc.");
@@ -316,7 +318,7 @@ function renderForm(rec) {
         <div><dt>Titularidad</dt><dd>${esc(rec.titularidad)}${rec.titularidad_otro ? " (" + esc(rec.titularidad_otro) + ")" : ""}</dd></div>
         ${rec.descripcion ? `<div><dt>Descripción</dt><dd>${esc(rec.descripcion)}</dd></div>` : ""}
       </dl>${metaHtml(rec)}</div>
-      <div class="panel-foot">${restaurable ? '<button class="btn primary" id="f-restore">Restaurar</button>' : '<span class="loading">Solo puede editar las instalaciones que usted añadió.</span>'}<span class="spacer"></span><button class="btn" id="f-close">Cerrar</button></div>`;
+      <div class="panel-foot">${restaurable ? '<button class="btn primary" id="f-restore">Restaurar</button>' : `<span class="loading">${isConsulta() ? "Su cuenta es de consulta: puede ver los datos, pero no cambiarlos." : "Solo puede editar las instalaciones que usted añadió."}</span>`}<span class="spacer"></span><button class="btn" id="f-close">Cerrar</button></div>`;
     p.hidden = false;
     if (restaurable) $("f-restore").onclick = async () => {
       if (busy) return;

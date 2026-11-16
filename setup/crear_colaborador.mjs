@@ -4,8 +4,12 @@
 // y edita o mueve solo las que él añadió. No elimina, no restaura y no exporta.
 // Requiere haber ejecutado supabase/02_rol_colaborador.sql.
 //
+// Con --consulta crea en cambio una cuenta de solo ver: ve todas las instalaciones activas con sus datos,
+// pero no añade, edita, mueve, elimina ni exporta. Requiere haber ejecutado supabase/03_rol_consulta.sql.
+//
 // Uso (desde la carpeta setup, con el mismo .env de configurar.mjs):
 //   node crear_colaborador.mjs correo@ejemplo.com "contraseña de al menos 10 caracteres"
+//   node crear_colaborador.mjs correo@ejemplo.com "contraseña de al menos 10 caracteres" --consulta
 //
 // Si la cuenta ya existe, actualiza su contraseña y su rol.
 
@@ -16,9 +20,11 @@ import { fileURLToPath } from "node:url";
 const AQUI = dirname(fileURLToPath(import.meta.url));
 function salir(msg) { console.error("\n✗ " + msg + "\n"); process.exit(1); }
 
-const [, , correoArg, password] = process.argv;
+const args = process.argv.slice(2);
+const ROL = args.includes("--consulta") ? "consulta" : "colaborador";
+const [correoArg, password] = args.filter(a => a !== "--consulta");
 const correo = (correoArg || "").trim().toLowerCase();
-if (!correo.includes("@") || !password) salir('Uso: node crear_colaborador.mjs correo@ejemplo.com "contraseña"');
+if (!correo.includes("@") || !password) salir('Uso: node crear_colaborador.mjs correo@ejemplo.com "contraseña" [--consulta]');
 if (password.length < 10) salir("La contraseña debe tener al menos 10 caracteres.");
 
 const envPath = join(AQUI, ".env");
@@ -60,11 +66,11 @@ try {
     nuevo = true;
   }
   await api("POST", "/rest/v1/perfiles?on_conflict=user_id",
-    { user_id: usuario.id, correo, rol: "colaborador", municipio_id: null },
+    { user_id: usuario.id, correo, rol: ROL, municipio_id: null },
     { Prefer: "resolution=merge-duplicates,return=minimal" });
-  console.log(`\n✓ Cuenta de colaborador ${nuevo ? "creada" : "actualizada"}: ${correo}\n`);
+  console.log(`\n✓ Cuenta de ${ROL === "consulta" ? "consulta (solo ver)" : "colaborador"} ${nuevo ? "creada" : "actualizada"}: ${correo}\n`);
 } catch (e) {
-  if (/perfiles_rol_check|perfil_municipio_segun_rol/.test(e.message)) salir("La base de datos aún no conoce el rol «colaborador». Ejecute primero supabase/02_rol_colaborador.sql en el SQL Editor.");
+  if (/perfiles_rol_check|perfil_municipio_segun_rol/.test(e.message)) salir(`La base de datos aún no conoce el rol «${ROL}». Ejecute primero ${ROL === "consulta" ? "supabase/03_rol_consulta.sql" : "supabase/02_rol_colaborador.sql"} en el SQL Editor.`);
   if (e.status === 401 || e.status === 403) salir("Supabase rechazó la clave. Revise SUPABASE_SECRET_KEY en .env.");
   salir(e.message);
 }
