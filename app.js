@@ -9,7 +9,7 @@ const sb = window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey);
 const TITULARIDAD = ["Federal", "Estatal", "Municipal", "Comunitario", "Privado", "Desconocido", "Otro"];
 const COLS = "id,creado_por,nombre,tipos,tipo_otro,titularidad,titularidad_otro,descripcion,municipio_id,lat,lng," +
   "creado_por_correo,creado_en,modificado_por_correo,modificado_en,eliminado,eliminado_por_correo,eliminado_en";
-const FUNDING = "Este proyecto es liderado por Estudios Técnicos, Inc., bajo contrato (2026-000333) con el Departamento de Recreación y Deportes (DRD). Es posible gracias a una subvención para planificación a través del programa Land and Water Conservation Fund (LWCF, por sus siglas en inglés) del Servicio de Parques Nacionales (NPS, por sus siglas en inglés) mediante la aportación P24AP01415 (proyecto 72-00178).";
+const FUNDING = "Este proyecto es liderado por Estudios Técnicos, Inc., bajo el contrato (2026-000333) con el Departamento de Recreación y Deportes (DRD). Es posible gracias a una subvención para planificación a través del programa Land and Water Conservation Fund (LWCF, por sus siglas en inglés) del Servicio de Parques Nacionales (NPS, por sus siglas en inglés) mediante la aportación P24AP01415 (proyecto 72-00178).";
 
 /* ---------- utilidades ---------- */
 const $ = id => document.getElementById(id);
@@ -368,8 +368,9 @@ function renderForm(rec) {
     <div class="panel-foot">
       <button class="btn primary" id="f-save">Guardar</button>
       <button class="btn" id="f-cancel">Cancelar</button>
+      ${isNew ? "" : '<button class="btn" id="f-move">Mover</button>'}
       <span class="spacer"></span>
-      ${isNew ? "" : '<button class="btn" id="f-move">Mover</button>' + (isColab() ? "" : '<button class="btn danger" id="f-del">Eliminar</button>')}
+      ${isNew || isColab() ? "" : '<button class="btn danger" id="f-del">Eliminar</button>'}
     </div>`;
   p.hidden = false;
   map.invalidateSize();

@@ -3,7 +3,7 @@
 Mapa web para que el personal de los 78 municipios de Puerto Rico identifique sus instalaciones de
 recreación al aire libre, como parte de la actualización del Plan Integral de Recreación al Aire Libre (SCORP).
 
-Este proyecto es liderado por Estudios Técnicos, Inc., bajo contrato (2026-000333) con el Departamento de
+Este proyecto es liderado por Estudios Técnicos, Inc., bajo el contrato (2026-000333) con el Departamento de
 Recreación y Deportes (DRD). Es posible gracias a una subvención para planificación a través del programa
 Land and Water Conservation Fund (LWCF, por sus siglas en inglés) del Servicio de Parques Nacionales (NPS,
 por sus siglas en inglés) mediante la aportación P24AP01415 (proyecto 72-00178).
