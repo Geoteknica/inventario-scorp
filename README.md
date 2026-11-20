@@ -66,4 +66,4 @@ que puede editarlo o eliminarlo como los suyos.
 - Cada municipio ve y edita solo sus instalaciones; de los municipios vecinos ve únicamente la ubicación.
 - Nada se borra: eliminar oculta la instalación, y la administración puede restaurarla.
 
-Contacto: Roberto Moyano, Estudios Técnicos, Inc. · 787-751-1675 · rmoyano@estudiostecnicos.com
+Contacto: Roberto Moyano, Estudios Técnicos, Inc. · 787-751-1675 · rmoyano+scorp@estudiostecnicos.com
